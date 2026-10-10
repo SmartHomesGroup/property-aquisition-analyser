@@ -1,0 +1,65 @@
+# Local development stack. Run from the repo root: `make up`.
+#   db     PostgreSQL 17 + PostGIS 3.5        localhost:5432
+#   tiles  Martin vector tile server          localhost:3000
+#   api    (profile "full") the FastAPI app   localhost:8000
+# The API is normally run from a local venv during development (`make api`).
+
+name: paa
+
+services:
+  db:
+    image: postgis/postgis:17-3.5
+    shm_size: 2gb   # parallel sorts/hash joins use /dev/shm; Docker's 64 MB default fails the build
+    environment:
+      POSTGRES_USER: paa
+      POSTGRES_PASSWORD: paa
+      POSTGRES_DB: paa
+    command:
+      - postgres
+      - -c
+      - shared_buffers=2GB
+      - -c
+      - work_mem=256MB
+      - -c
+      - maintenance_work_mem=1GB
+      - -c
+      - max_parallel_workers_per_gather=4
+      - -c
+      - random_page_cost=1.1
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U paa -d paa"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  tiles:
+    image: ghcr.io/maplibre/martin:1.16.1
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://paa:paa@db:5432/paa
+    command: ["--config", "/etc/martin.yaml"]
+    volumes:
+      - ./martin.yaml:/etc/martin.yaml:ro
+    ports:
+      - "127.0.0.1:3000:3000"
+
+  api:
+    profiles: ["full"]
+    build: ../backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PAA_DATABASE_URL: postgresql://paa:paa@db:5432/paa
+      PAA_CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+    ports:
+      - "127.0.0.1:8000:8000"
+
+volumes:
+  dbdata:

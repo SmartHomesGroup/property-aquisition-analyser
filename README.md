@@ -102,7 +102,16 @@ fair, and see the evidence.
 
 ## Status
 
-Early. A live MVP (`index.html`) sends a Rightmove URL to an n8n workflow that uses Claude to
-produce an investment summary; it is a demo, not the engine. Current work is the UK £/m² heatmap
-on our own map. See `AGENTS.md` for scope, roadmap, data sources, architecture and decisions, and
-`docs/research/` for the exploratory research behind them.
+Early. Two things exist:
+
+- A live MVP (`index.html`) that sends a Rightmove URL to an n8n workflow using Claude to produce
+  an investment summary. It is a demo, not the engine.
+- A first draft of the real product: a UK £/m² heatmap built from Land Registry, EPC and House
+  Price Index data on our own map (`backend/`, `web/`, `infra/`), with a pin-drop that shows the
+  local price distribution and where an asking price sits in it. The same page takes a pasted
+  listing link: the MVP's engine analyses it, the listing lands on the map, and its asking price
+  is placed against the local evidence. Run it with `make up` and the steps in
+  `backend/README.md`.
+
+See `AGENTS.md` for scope, roadmap, data sources, architecture and decisions, and `docs/research/`
+for the research behind them, including the mapping-tools report.

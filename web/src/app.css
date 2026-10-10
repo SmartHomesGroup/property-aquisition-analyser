@@ -1,0 +1,195 @@
+/*
+ * Design tokens and base styles. Every colour, font and spacing value used by components
+ * comes from here. Light and dark both work; `data-theme` on <html> overrides the OS choice.
+ */
+:root {
+	--font-text: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+	--font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+	--bg: #f6f7f8;
+	--panel: #ffffff;
+	--panel-2: #f0f2f4;
+	--border: #d9dde2;
+	--text: #14181d;
+	--muted: #5c6773;
+	--accent: #0b63ce;
+	--accent-text: #ffffff;
+	--good: #1b8a5a;
+	--warn: #b7791f;
+	--bad: #c0392b;
+	--focus: #0b63ce;
+
+	--radius: 4px;
+	--space-1: 4px;
+	--space-2: 8px;
+	--space-3: 12px;
+	--space-4: 16px;
+	--space-5: 24px;
+	--panel-width: 380px;
+	--shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		--bg: #0f1216;
+		--panel: #171b21;
+		--panel-2: #1f242b;
+		--border: #2b323b;
+		--text: #e8ecf1;
+		--muted: #97a3b0;
+		--accent: #4d9cff;
+		--accent-text: #0b0f14;
+		--good: #3ccf8e;
+		--warn: #e2a640;
+		--bad: #ff6b5b;
+		--focus: #4d9cff;
+		--shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.5);
+	}
+}
+:root[data-theme='dark'] {
+	--bg: #0f1216;
+	--panel: #171b21;
+	--panel-2: #1f242b;
+	--border: #2b323b;
+	--text: #e8ecf1;
+	--muted: #97a3b0;
+	--accent: #4d9cff;
+	--accent-text: #0b0f14;
+	--good: #3ccf8e;
+	--warn: #e2a640;
+	--bad: #ff6b5b;
+	--focus: #4d9cff;
+	--shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+}
+
+body {
+	font-family: var(--font-text);
+	font-size: 14px;
+	line-height: 1.45;
+	color: var(--text);
+	background: var(--bg);
+	-webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+	margin: 0;
+	font-weight: 650;
+	letter-spacing: -0.01em;
+}
+h1 {
+	font-size: 16px;
+}
+h2 {
+	font-size: 13px;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--muted);
+}
+
+p {
+	margin: 0;
+}
+
+button,
+input,
+select {
+	font: inherit;
+	color: inherit;
+}
+
+:focus-visible {
+	outline: 2px solid var(--focus);
+	outline-offset: 2px;
+}
+
+.mono {
+	font-family: var(--font-mono);
+	font-variant-numeric: tabular-nums;
+}
+.muted {
+	color: var(--muted);
+}
+.small {
+	font-size: 12px;
+}
+
+/* Segmented control shared by the filter bar and the panel. */
+.segmented {
+	display: inline-flex;
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	overflow: hidden;
+	background: var(--panel);
+}
+.segmented button {
+	border: 0;
+	background: transparent;
+	padding: 6px 10px;
+	cursor: pointer;
+	color: var(--muted);
+	min-height: 32px;
+}
+.segmented button + button {
+	border-left: 1px solid var(--border);
+}
+.segmented button[aria-pressed='true'] {
+	background: var(--accent);
+	color: var(--accent-text);
+}
+
+.btn {
+	border: 1px solid var(--border);
+	background: var(--panel);
+	border-radius: var(--radius);
+	padding: 6px 12px;
+	cursor: pointer;
+	min-height: 32px;
+}
+.btn.primary {
+	background: var(--accent);
+	color: var(--accent-text);
+	border-color: var(--accent);
+}
+
+.field {
+	display: grid;
+	gap: var(--space-1);
+}
+.field label {
+	font-size: 12px;
+	color: var(--muted);
+}
+.field input {
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	background: var(--panel);
+	padding: 6px 8px;
+	min-height: 32px;
+	width: 100%;
+}
+
+/* MapLibre chrome, kept neutral. */
+.maplibregl-ctrl-group {
+	box-shadow: var(--shadow) !important;
+}
+.maplibregl-popup-content {
+	font-family: var(--font-text);
+	color: #14181d;
+	border-radius: var(--radius);
+	padding: 8px 10px;
+	box-shadow: var(--shadow);
+}

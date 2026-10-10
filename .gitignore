@@ -1,0 +1,19 @@
+# Source data downloads (gigabytes; re-fetch with `paa fetch`)
+/data/
+
+# Python
+backend/.venv/
+backend/.env
+__pycache__/
+*.pyc
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Node (web/ has its own .gitignore for build output)
+node_modules/
+
+# Editors / OS
+.vscode/settings.json
+.idea/
+.DS_Store

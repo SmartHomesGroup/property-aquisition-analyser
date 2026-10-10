@@ -1,0 +1,16 @@
+# Martin tile server configuration.
+# Publishes every function in schema `map` as a function source:
+#   http://localhost:3000/cells/{z}/{x}/{y}?window=24&ptype=A
+#   http://localhost:3000/postcodes/{z}/{x}/{y}?window=24&ptype=A
+# Catalogue: http://localhost:3000/catalog
+
+listen_addresses: '0.0.0.0:3000'
+cache_size_mb: 512
+
+postgres:
+  connection_string: ${DATABASE_URL}
+  pool_size: 8
+  auto_publish:
+    tables: false
+    functions:
+      from_schemas: map

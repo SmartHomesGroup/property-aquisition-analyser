@@ -1,0 +1,53 @@
+[project]
+name = "paa"
+version = "0.1.0"
+description = "Property Acquisition Analyser: data pipeline and API"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Proprietary" }
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "psycopg[binary,pool]>=3.2",
+    "pydantic>=2.8",
+    "pydantic-settings>=2.4",
+    "typer>=0.12",
+    "httpx>=0.27",
+]
+
+[project.scripts]
+paa = "paa.cli:app"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.6",
+    "mypy>=1.11",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/paa"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["paa"]
+mypy_path = "src"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

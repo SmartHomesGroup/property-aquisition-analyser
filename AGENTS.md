@@ -128,8 +128,8 @@ period or n is worse than nothing.
 | Stage | Goal | Status |
 |---|---|---|
 | 0 | Current MVP: paste URL → n8n webhook → Claude-generated investment analysis (`index.html`). | Live. **Keep for now** while the rest is built; not the long-term engine. |
-| 1 | **Heatmap.** Build the UK £/m² dataset (PPD + EPC + postcodes → PostGIS → aggregated cells) and an interactive map. A Rightmove property pops up on *our* map. | **Now.** |
-| 2 | Single-listing overlay (bootstrapping entry point): paste link → identify address + asking price → place on the map, compute metric 1 and 2, show comparables and the "why / what could make us wrong" panel. | Next |
+| 1 | **Heatmap.** Build the UK £/m² dataset (PPD + EPC + postcodes → PostGIS → aggregated cells) and an interactive map with a pin-drop. | **First draft working (2026-10-10); iterating.** See "Current state of the repo". |
+| 2 | Single-listing overlay (bootstrapping entry point): paste link → identify address + asking price → place on the map, compute metric 1 and 2, show comparables and the "why / what could make us wrong" panel. | **Started (2026-10-10):** the paste box, the stage-0 engine behind `POST /api/listings/analyse`, placement on the map and the asking price flowing into metric 1. Still needs: floor area and full postcode from the listing, metric 2. |
 | 3 | Our own analysis protocol replaces the generic AI call (may still be agentic, but streamlined, deterministic where possible, with fixed inputs/outputs). | After 2 |
 | 4 | Organic data: full listings overlay and the area+budget entry point ("most undervalued in area/budget", "up and coming areas"). Requires a legitimate listings feed. This is the destination, not an add-on. | Later |
 | 5 | Builder-grade granularity: renovation/extension uplift projections (metric 3), "loft adds £X, rear extension £Y", ROI on time and money. | Future |
@@ -141,16 +141,189 @@ time window) before touching MapLibre.
 
 ## Current state of the repo
 
-- `index.html` — a single static page. Pastes a Rightmove/auction URL, POSTs it to an n8n
-  webhook, and renders whatever JSON comes back: investment score, BRR and Flip scenarios,
-  GDV, refurb cost, buying/bridge/selling costs, summary, risks. The UI recreates no numbers;
-  all figures come from the "Investment Engine" (an n8n workflow calling Claude). The field
-  names it reads (`Asking Price`, `Estimated GDV`, `BRR Maximum Allowable Offer (MAO)`,
-  `Flip ROI` …) are the de-facto contract with that workflow.
-- Note the hard-coded Lancashire refurbishment assumption and fixed targets (£25k min profit,
-  20% min ROI, 12% contingency, 75% LTV) buried in the modal text. Those belong in config once
-  the engine is ours.
-- No build, no tests, no backend in this repo yet. The n8n workflow lives outside the repo.
+Stage 1 ("pin-drop on heatmap") has a working first draft as of 2026-10-10, and the stage-0
+paste-a-listing flow is wired into the same page (same day) so the two entry points run in
+tandem. Layout:
+
+```
+backend/   Python 3.12+ package `paa` (uv). ETL + FastAPI. SQL in src/paa/sql/.
+web/       SvelteKit 3 + Svelte 5 + TypeScript SPA. MapLibre via svelte-maplibre-gl.
+infra/     docker-compose: PostGIS 17/3.5 (`db`), Martin 1.16 (`tiles`), optional `api`.
+tools/     shot.mjs: headless-Chromium screenshot + console-error smoke test (no deps).
+docs/      research transcript, research_notes/, reports/ (the tooling research report).
+data/      git-ignored downloads (PPD, Code-Point Open, UK HPI, user-supplied EPC CSVs).
+index.html The stage-0 MVP (n8n webhook -> Claude). Untouched; still the deployed demo.
+Makefile   up / down / api / web / check / test / build-data.
+```
+
+Run it: `make up` → `cd backend && uv sync && cp .env.example .env && uv run paa db migrate`
+→ `uv run paa fetch --ppd-year 2025` → `load-postcodes`, `load-hpi`, `load-ppd <file> --replace`,
+`load-epc` (or `dev synth-epc`) → `uv run paa build` → restart `tiles` → `make api` + `make web`.
+Full detail in `backend/README.md`.
+
+### Data flow as built
+
+```
+PPD csv ──┐                                  core.sale ─┐
+Code-Point┼─ paa load-* ─► core.* tables     core.epc ──┼─ 010 match ─► core.sale_epc
+UK HPI ───┤                                  core.postcode, core.hpi
+EPC csv ──┘                                             └─ 020 enrich ─► core.sale_enriched
+                                                           (geom 27700, floor area, HPI-adjusted £/m²)
+                                                        └─ 030 cells ──► map.cell_stats
+                                                           (Web Mercator squares, nominal 5000/1000/250/100 m × window 12/24/60 × type A/D/S/T/F; n ≥ 5)
+                                                        └─ 040 tiles ──► map.cells(), map.postcodes()  (Martin function sources)
+FastAPI  /api/meta  /api/postcodes/{pc}  /api/area  /api/comparables   (reads sale_enriched + build_info)
+         POST /api/listings/analyse  (paste flow: calls the n8n engine, stores core.listing_analysis,
+                                      places the listing: postcode → street → district centroid)
+Web      MapLibre: one fill+line layer per zoom band on cells tiles (step colour on `median`),
+         circle layer on postcode tiles (z≥14), draggable Marker pin.
+         SearchBox: link → ListingPanel (engine output) + pin + subject prefilled; postcode → pin.
+         PinPanel calls /api/area and /api/comparables.
+```
+
+### Decisions made in stage 1 (and why)
+
+- **Web Mercator squares, not H3 and not BNG.** The research report recommends h3-pg; we chose
+  `ST_MakeEnvelope` squares because they need no extension, nest exactly and are trivial to
+  compute. They were first laid out on the British National Grid (EPSG:27700); that looked wrong
+  on screen because BNG is a Transverse Mercator centred on 2°W and its squares appear rotated
+  by the grid convergence (up to ~3°) on a Web Mercator map. Cells are now binned in EPSG:3857,
+  axis-aligned on screen, with the nominal size exact at 53°N (a "5 km" cell is ~5.3 km on the
+  south coast, ~4.4 km in northern Scotland). The UI says "~5 km". Pin-radius and comparables
+  queries still run in BNG metres, so distances are exact. H3 remains an option.
+- **Martin function sources over pre-built PMTiles.** Filters (window × type) make static tiles
+  combinatorial; Martin caches. Revisit if tile latency matters at national zoom (z6 tile ≈ 110 KB).
+- **Time windows count back from the latest sale held (`meta.build_info.ref_date`)**, not the
+  wall clock, and every API response carries its bracket. The UI prints it verbatim.
+- **Postcode centroids for location.** Sales share a point per postcode, so street zoom shows one
+  circle per postcode with n and median rather than stacked fake building points.
+- **Address matcher is a first draft** (PAON/SAON whole-word match within the same postcode, nearest
+  lodgement date wins; UPRN lookup route first when present). Improve with
+  `uk_address_matcher`/Splink when match rate matters (see research report).
+- **Synthetic EPC exists for development only** (`paa dev synth-epc`). It sets
+  `synthetic_epc=true` in build_info, the API exposes `synthetic`, and the UI shows a red banner.
+  Never deploy with it. `paa dev drop-synth` removes it.
+- **Basemap**: OpenFreeMap Positron (free, keyless, commercial OK) for now; OS NGD Tiles once we
+  have a Data Hub key (set `BASEMAP_STYLE`). The overlay code is identical either way.
+- **Colour scale**: fixed national breaks (£1.5k … £8k/m²), ColorBrewer YlGnBu, `step`
+  expression, legend states window/type/min-n. One scale everywhere so colours mean the same thing.
+- **Stage-0 MVP (`index.html`) left in place**, untouched. Its n8n engine is now also reachable
+  through `POST /api/listings/analyse`, which the web app's search box uses when the text is a
+  link. The backend proxies the webhook (URL in `PAA_LISTING_WEBHOOK_URL`, never in the browser),
+  stores every request and response in `core.listing_analysis` (the organic-data slot from
+  "Listings access"), re-uses a result younger than `PAA_LISTING_CACHE_HOURS` (24) so a repeat
+  paste costs nothing, and returns the engine's fields verbatim under `fields` plus a `property`
+  block we derived. The frontend reads `fields` through `web/src/lib/listing.ts` only, so the
+  stage-3 engine can replace n8n without touching the panel.
+- **Listing placement without a full postcode.** The engine returns outward codes only
+  ("…, Preston, Lancashire, PR1"). `locate()` in `routes/listings.py` tries the full postcode,
+  then the centroid of the postcodes of Land Registry sales on that street and town, then the
+  district centroid, and reports `precision` (postcode / street / district); the panel says which
+  and asks the user to drag the pin when it is coarse. No third-party geocoder.
+- **One search box for both entry points.** Link or postcode, detected by shape
+  (`looksLikeUrl`). Keeps the two entry points visibly equal and the top bar simple.
+- **Tile zoom bands with overzoom** (`web/src/lib/bands.ts`). Each cell size is its own
+  MapLibre source fetched at a single zoom (5, 9, 12, 14) and overzoomed through its band;
+  layers switch at the band edges. Zooming inside a band therefore loads no tiles and re-parses
+  nothing, which removed most of the stutter. The bands must match `map.cell_size_for_zoom()`
+  (tested in `bands.spec.ts`).
+- **Momentum wheel zoom** (`web/src/lib/wheelZoom.ts`). MapLibre's default moves ~0.15 zoom per
+  notch with a 200 ms step; ours is a velocity model with exponential decay (0.45 levels per
+  notch, 160 ms time constant, capped pending travel), zooming about the cursor. Disabled under
+  `prefers-reduced-motion`; touch pinch is MapLibre's own.
+- **Pan bounds are deliberately loose** (`MAX_BOUNDS`, roughly Iceland to the Caspian).
+  MapLibre raises the zoom until `maxBounds` fills the viewport, so the earlier tight GB bounds
+  made zoom-out stick at 5.6 and snap the centre. Tiles are still only requested inside
+  `GB_BOUNDS`.
+
+### Tooling gotchas (learned the hard way)
+
+- SvelteKit 3: imports use `#lib/...` **with file extensions** (`#lib/api.ts`,
+  `#lib/state.svelte.ts`); env vars are declared in `src/env.ts` via `defineEnvVars` and imported
+  from `$app/env/public` (no `PUBLIC_` prefix, no `$env/dynamic/*`); SPA mode = `ssr=false` in
+  `+layout.ts` plus `adapter-static({ fallback: 'index.html' })` in `vite.config.ts`.
+- `svelte-maplibre-gl`: import `svelte-maplibre-gl/vite` once (layout) to register the worker,
+  and exclude the package from `optimizeDeps`, or the worker fails to load in dev.
+- System npm 9 crashes with Node 22 in `web/`; use `npx npm@11 install`.
+- `uv run` re-syncs the venv when `pyproject.toml` changed; two `uv run` commands in parallel
+  race and one fails with "Failed to spawn: paa". Run uv commands sequentially.
+- Martin discovers functions at startup: after `paa build` creates/changes functions in schema
+  `map`, restart the `tiles` container (`make build-data` does).
+- PostgreSQL in Docker needs `shm_size` (set to 2 GB) or the parallel aggregation fails with
+  "could not resize shared memory segment".
+- The API's CORS allow-list must include the exact dev origin (`127.0.0.1:5173` and
+  `localhost:5173` are different origins).
+- After a component is rewritten wholesale while `vite dev` is running, Vite can keep serving an
+  empty compiled module for it (the map silently renders nothing, no console error). Restart the
+  dev server after deleting `web/node_modules/.vite`.
+- `paa serve --reload` does not always notice new route modules or `.env` changes; if a new
+  endpoint 404s, restart the API (kill the listener on port 8000, start it again).
+- In the `map.postcodes()` tile function the envelope is transformed into BNG, not each row into
+  Web Mercator; the other way round ignores the GiST index and costs ~0.5 s per tile.
+- Mouse-wheel zoom tests: `window.__paaMap` is set in dev builds, so a CDP script can call
+  `__paaMap.getZoom()` and dispatch `Input.dispatchMouseEvent` wheel events.
+- `tools/shot.mjs <url> <out.png> [--type "#postcode=N11 2AB"] [--click "button[type=submit]"]
+  [--width 390]` renders the page in headless Chromium and prints console errors. Use it to
+  verify changes at desktop and ~390 px before calling anything done.
+
+### Known gaps after stage 1
+
+- Only 2025 PPD is loaded locally, so the 12/24/60-month windows are identical until the complete
+  file is loaded (`paa fetch --ppd-complete`, ~5.5 GB, then `load-ppd --replace`).
+- No real EPC data in the dev database yet (needs a GOV.UK One Login download by a human).
+- 100 m cells are sparse at street zoom with one year of data; consider showing 250 m cells
+  to z15 or lowering min-n with a visual "low confidence" treatment.
+- No property-history-vs-neighbours metric yet (needs the complete PPD history).
+- No tests against a live database; `tests/` covers pure functions only (the listing route's
+  engine call is tested with an httpx mock transport and the real captured response in
+  `tests/fixtures/n8n_response.json`).
+- The engine (n8n) takes ~30 s per listing and returns no full postcode or floor area, so the
+  listing pin is street-level at best and the £/m² comparison still needs the floor area typed in.
+  Stage 2/3 should extract the postcode and EPC floor area deterministically.
+- The engine's "Investment Score" and GDV are shown but labelled as its estimates; they are not
+  yet checked against our comparables (the whole point of stage 3).
+
+### Next steps (agreed 2026-10-10)
+
+In priority order. Each one is small enough to finish in a session or two.
+
+1. **Graph the price history of the selected property against its neighbours** (metric 2).
+   This is the first graph in the product and the first use of the `home` kit. Shape:
+   - Identify the property by address (PAON/SAON/street/postcode in `core.sale`; UPRN later).
+     From the listing flow the address is known; from a pin, the user picks it from the
+     postcode's sale list in the pin panel.
+   - `GET /api/property/history` returns every sale of that address since 1995 (price, date,
+     type, HPI-indexed value as of `ref_date`) plus the neighbours' series: median and p25–p75
+     of HPI-indexed £/m² per year for the same type on the street, in the postcode, and within
+     500 m / 1 km. One response, so the chart can switch radius without a round trip.
+   - Chart: time on x, value indexed to today on y; the property's sales as marked points
+     joined by a line, the neighbours as a shaded band with a median line. A `Segmented`
+     control for the radius and a `Slider` or preset for the window. No text inside the SVG;
+     the readout (n, window, geography, "HPI-adjusted") sits in the `Tile` frame.
+   - The one-line verdict above it: "appreciated 11% less than terraces within 500 m since
+     2009 (n=41)". Cap the claim when the property has fewer than two sales.
+   - Needs the complete PPD history (step 2) to mean anything; the chart can be built against
+     2025 data and will simply show one point per property until then.
+2. **Load the complete PPD** (`paa fetch --ppd-complete`, then `load-ppd --replace`, rebuild).
+   Makes the 12/24/60-month windows real and is the prerequisite for step 1.
+3. **Real EPC data** for at least one local authority (human download), then measure the
+   address-match rate before trusting the £/m² figures at street zoom.
+4. **Deterministic postcode and floor area from a listing**: read the full postcode and the
+   EPC floor area from the listing page (or the EPC register by address) instead of the engine's
+   outward code, so the pin is at postcode precision and metric 1 no longer needs the floor area
+   typed in. First step towards the stage-3 engine.
+5. **Decide the design language** before the chart lands (see "Interactive figures"): tokens in
+   one CSS file, light and dark, mobile first.
+
+### Stage-0 MVP notes (kept for reference)
+
+- `index.html` pastes a Rightmove/auction URL, POSTs it to an n8n webhook, and renders whatever
+  JSON comes back (investment score, BRR and Flip scenarios, GDV, refurb and finance costs). The
+  field names it reads (`Asking Price`, `Estimated GDV`, `BRR Maximum Allowable Offer (MAO)`,
+  `Flip ROI` …) are the de-facto contract with that workflow, which lives outside the repo.
+- Hard-coded Lancashire refurbishment assumption and fixed targets (£25k min profit, 20% min
+  ROI, 12% contingency, 75% LTV) are buried in the modal text; they belong in config once the
+  engine is ours.
 
 ### Assessment of the current AI approach
 
