@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -13,23 +14,9 @@ body:before{content:"";position:fixed;inset:-30%;pointer-events:none;background:
 .hero{padding:32px;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-100px;top:-140px;width:340px;height:340px;background:radial-gradient(circle,rgba(0,168,255,.16),transparent 65%);pointer-events:none}.hero h1{font-size:38px;line-height:1.05;margin:0 0 9px;letter-spacing:-1.2px}.sub{color:var(--muted);margin:0 0 24px;font-size:14px}.inputrow{display:flex;gap:10px;position:relative;z-index:1}input{flex:1;padding:16px 17px;border:1px solid #263746;border-radius:11px;background:#080e15;color:var(--text);font-size:15px;outline:none;box-shadow:inset 0 0 18px rgba(0,0,0,.2);transition:.2s}input::placeholder{color:#536576}input:focus{border-color:rgba(0,168,255,.75);box-shadow:0 0 0 3px rgba(0,168,255,.09),0 0 24px rgba(0,168,255,.08)}button{border:1px solid rgba(0,202,255,.55);border-radius:11px;padding:0 23px;background:linear-gradient(135deg,#009fff,#006cff);color:white;font-weight:800;cursor:pointer;box-shadow:0 0 24px rgba(0,145,255,.22),inset 0 1px 0 rgba(255,255,255,.2);transition:transform .15s,box-shadow .15s,filter .15s}button:hover{transform:translateY(-1px);filter:brightness(1.08);box-shadow:0 0 30px rgba(0,168,255,.38)}button:disabled{opacity:.55;cursor:not-allowed;transform:none}.status{margin-top:13px;font-size:12px;color:#7890a4;min-height:18px}.error{color:var(--red)}
 .results{display:none;margin-top:22px}.overview{display:grid;grid-template-columns:1.45fr .55fr;gap:15px}.card{padding:22px}.address{font-size:27px;font-weight:850;letter-spacing:-.5px}.meta{color:var(--muted);margin-top:7px;font-size:13px}.overview-stats{display:flex;gap:28px;margin-top:20px;flex-wrap:wrap}.ov-stat .k{font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:#71879a}.ov-stat .v{font-size:22px;font-weight:850;margin-top:5px}.score{text-align:center;position:relative;overflow:hidden}.score:before{content:"";position:absolute;inset:-50%;background:radial-gradient(circle,rgba(0,168,255,.12),transparent 42%)}.score>*{position:relative}.score .num{font-size:55px;font-weight:900;line-height:1;text-shadow:0 0 28px rgba(0,168,255,.3)}.score .label{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-top:7px}.strategy{display:inline-block;margin-top:11px;padding:7px 13px;border-radius:999px;background:rgba(0,168,255,.1);border:1px solid rgba(0,168,255,.3);color:#7fdcff;font-weight:800;font-size:12px}
 .section-head{display:flex;justify-content:space-between;align-items:end;margin:30px 2px 12px}.section-head h2{font-size:18px;margin:0;letter-spacing:-.2px}.section-head p{margin:0;color:#64798b;font-size:11px}.scenarios{display:grid;grid-template-columns:1fr 1fr;gap:15px}.scenario{padding:23px;position:relative;overflow:hidden}.scenario:after{content:"";position:absolute;width:230px;height:230px;right:-130px;top:-130px;background:radial-gradient(circle,rgba(0,168,255,.12),transparent 68%);pointer-events:none}.scenario.flip:after{background:radial-gradient(circle,rgba(53,224,161,.08),transparent 68%)}.scenario-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;position:relative;z-index:1}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1.1px;color:#70cfff;font-weight:800}.scenario.flip .eyebrow{color:#7ee7bf}.scenario h3{font-size:23px;margin:5px 0 5px;letter-spacing:-.5px}.scenario-sub{font-size:11px;color:#718699;line-height:1.45}.status-pill{padding:7px 11px;border-radius:999px;font-size:10px;text-transform:uppercase;letter-spacing:.7px;font-weight:900;border:1px solid #314555;background:#101b25;color:#a9bac8;white-space:nowrap}.status-pill.good{color:#75e9ba;border-color:rgba(53,224,161,.35);background:rgba(53,224,161,.07)}.status-pill.warn{color:#ffd083;border-color:rgba(255,191,91,.35);background:rgba(255,191,91,.07)}.status-pill.bad{color:#ff8c9a;border-color:rgba(255,95,114,.35);background:rgba(255,95,114,.07)}
-.scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;position:relative;z-index:1}.srow{padding:11px 12px;background:rgba(7,13,19,.48);border:1px solid #1b2a37;border-radius:10px}.srow .k{font-size:9px;letter-spacing:.7px;text-transform:uppercase;color:#71879a}.srow .v{font-size:17px;font-weight:850;margin-top:4px}.srow.primary{border-color:#23465d;box-shadow:inset 0 0 20px rgba(0,168,255,.035)}.srow.primary .v{color:#eaf8ff;text-shadow:0 0 14px rgba(0,168,255,.18)}.scenario-actions{display:flex;justify-content:space-between;align-items:center;margin-top:17px;position:relative;z-index:1}.scenario-note{font-size:10px;color:#617587}.detail-btn{padding:8px 11px;font-size:10px;background:transparent;color:#72cfff;border:1px solid #294052;height:auto;box-shadow:none}.detail-btn:hover{box-shadow:0 0 14px rgba(0,168,255,.15);background:rgba(0,168,255,.05)}
-.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.card h2{font-size:15px;margin:0 0 12px}.text{font-size:13px;line-height:1.65;color:#aab9c7;white-space:pre-wrap}.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{padding:15px;min-height:95px}.k{font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:#71879a;margin-bottom:7px}.v{font-size:18px;font-weight:850}.metric .detail-btn{margin-top:9px}.note{margin-top:15px;background:rgba(8,15,22,.7);border:1px solid #1b2a38;border-radius:12px;padding:13px;font-size:11px;color:#74889a}.note b{color:#a9bfd1}
-.loading{display:none;margin-top:20px;padding:24px}.loading-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.loading-title{font-size:15px;font-weight:800}.loading-percent{font-size:12px;color:#65cfff}.progress{height:7px;background:#17232e;border-radius:99px;overflow:hidden}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,#006cff,#00d0ff);border-radius:99px;box-shadow:0 0 16px rgba(0,190,255,.65);transition:width .5s ease}.steps{margin-top:18px;display:grid;gap:9px}.step{display:flex;align-items:center;gap:10px;font-size:12px;color:#617487}.step-dot{width:20px;height:20px;border-radius:50%;background:#17232e;border:1px solid #263746;display:grid;place-items:center;font-size:10px;font-weight:800}.step.active{color:#d9f4ff}.step.active .step-dot{background:#063c5d;border-color:#00a8ff;box-shadow:0 0 15px rgba(0,168,255,.35)}.step.done{color:#7f97aa}.step.done .step-dot{background:rgba(53,224,161,.08);border-color:rgba(53,224,161,.4);color:var(--green)}.spinner{width:10px;height:10px;border:2px solid #274054;border-top-color:#00caff;border-radius:50%;animation:spin .8s linear infinite;display:none}.step.active .spinner{display:block}.step.active .step-check,.step.done .spinner{display:none}@keyframes spin{to{transform:rotate(360deg)}}
-.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(2,6,10,.76);backdrop-filter:blur(7px);z-index:1000;padding:20px}.modal{background:linear-gradient(145deg,#121c26,#0b1219);max-width:610px;width:100%;margin:auto;border:1px solid #284153;border-radius:18px;padding:24px;box-shadow:0 0 55px rgba(0,128,255,.16),0 25px 70px rgba(0,0,0,.65);max-height:90vh;overflow:auto}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modal h2{margin:0;font-size:19px}.close{background:#17232e;color:#9fb1c2;width:34px;height:34px;padding:0;border-radius:50%;font-size:18px;box-shadow:none;border:1px solid #2a3b4b}.breakdown-row{display:flex;justify-content:space-between;gap:20px;padding:11px 0;border-bottom:1px solid #1d2b37;font-size:13px;color:#91a4b5}.breakdown-row strong{color:#eef6ff}.breakdown-row.total{font-weight:800;font-size:14px;border-top:1px solid #315064;border-bottom:0;margin-top:5px;padding-top:15px}.breakdown-note,.formula{color:#7e93a5;font-size:11px;line-height:1.55;margin-top:14px;background:#0b141d;border:1px solid #1c2c39;border-radius:10px;padding:13px}.modal-section{margin-top:18px}.modal-section h4{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#6e9ab4;margin:0 0 6px}.modal-section:first-of-type{margin-top:0}
-@media(max-width:900px){.scenarios,.analysis-grid,.overview{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:650px){.inputrow{flex-direction:column}.inputrow button{height:48px}.scenario-grid,.metric-grid{grid-template-columns:1fr}.hero h1{font-size:31px}.wrap{padding:20px 13px 50px}header{align-items:flex-start;gap:12px}.brand{font-size:17px}.badge{font-size:9px}.overview-stats{gap:18px}}
-
-.auction-fee-notice{margin:16px 0 22px;padding:17px 19px;border:1px solid rgba(255,191,91,.55);border-left:4px solid var(--amber);border-radius:13px;background:linear-gradient(135deg,rgba(255,191,91,.10),rgba(16,23,32,.92));color:var(--text)}
-.auction-fee-notice-title{font-size:14px;font-weight:800;color:var(--amber);margin-bottom:7px}
-.auction-fee-notice p{margin:0;color:#c5d1dc;font-size:12px;line-height:1.6}
-.auction-fee-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
-.auction-fee-summary>div{padding:11px 12px;background:rgba(5,10,16,.48);border:1px solid rgba(255,191,91,.22);border-radius:9px}
-.auction-fee-summary span{display:block;font-size:10px;color:var(--muted);margin-bottom:5px}
-.auction-fee-summary strong{font-size:15px;color:var(--text)}
-@media(max-width:650px){.auction-fee-summary{grid-template-columns:1fr}}
 </style>
 </head>
+
 <body>
 <div class="wrap">
 <header><div class="brand">Smart Homes <span>Property Acquisition Analyser</span></div><div class="badge">MVP • Test Environment</div></header>
@@ -60,6 +47,7 @@ body:before{content:"";position:fixed;inset:-30%;pointer-events:none;background:
 <div class="note"><b>Current model:</b> GDV and refurbishment figures are AI estimates. Comparable-sales validation will be added later. Investment calculations are produced by the Investment Engine.</div>
 </main></div>
 <div id="modalBackdrop" class="modal-backdrop"><div class="modal"><div class="modal-head"><h2 id="modalTitle">Calculation</h2><button id="modalClose" class="close">×</button></div><div id="modalBody"></div></div></div>
+
 <script>
 const WEBHOOK="https://dwilson92.app.n8n.cloud/webhook/property-analyser";
 const $=x=>document.getElementById(x);const money=v=>v==null||v===""?"—":new Intl.NumberFormat("en-GB",{style:"currency",currency:"GBP",maximumFractionDigits:0}).format(Number(v));const pct=v=>v==null||v===""?"—":Number(v)+"%";let propertyData={};
@@ -71,11 +59,80 @@ function showScenario(type){const m=pickValue('Asking Price','asking_price'),g=p
 if(type==='brr'){title='BRR — Buy, Renovate, Refinance';body='<div class="modal-section"><h4>Project</h4>'+bRow('Purchase price',money(m))+bRow('Buying costs',money(bc))+bRow('Refurbishment',money(r))+bRow('Contingency',money(con))+bRow('Bridge finance costs',money(bridge))+bRow('Total project cost',money(tot),true)+'</div><div class="modal-section"><h4>Refinance</h4>'+bRow('Estimated GDV',money(g))+bRow('New mortgage @ 75% LTV',money(mort))+bRow('Refinance costs','− '+money(refi))+bRow('Bridge loan repayment','− '+money(bl))+(cashLeft!==null?bRow('Cash left in deal',money(cashLeft),true):bRow('BRR cash released',money(cashReleased),true))+'</div><div class="modal-section"><h4>Value</h4>'+bRow('Value created',money(eq))+bRow('BRR maximum offer',money(brr),true)+'</div><div class="breakdown-note">The figures shown here are returned by the Investment Engine. No financial calculations are recreated by the UI.</div>'}
 if(type==='flip'){title='Flip — Buy, Renovate, Sell';body='<div class="modal-section"><h4>Project</h4>'+bRow('Purchase price',money(m))+bRow('Buying costs',money(bc))+bRow('Refurbishment',money(r))+bRow('Contingency',money(con))+bRow('Bridge finance costs',money(bridge))+bRow('Total project cost',money(tot),true)+'</div><div class="modal-section"><h4>Sale</h4>'+bRow('Estimated GDV',money(g))+bRow('Selling costs','− '+money(sell))+bRow('Estimated profit',money(profit),true)+bRow('Flip ROI',pct(roi),true)+'</div><div class="modal-section"><h4>Acquisition limit</h4>'+bRow('Target minimum profit','£25,000')+bRow('Target minimum ROI','20%')+bRow('Flip maximum offer',money(flip),true)+'</div><div class="breakdown-note">The figures shown here are returned by the Investment Engine. No financial calculations are recreated by the UI.</div>'}
 $('modalTitle').textContent=title;$('modalBody').innerHTML=body;$('modalBackdrop').style.display='flex'}
-function showDetail(type){const m=pickValue('Asking Price','asking_price'),r=pickValue('Estimated Refurb Cost','estimated_refurb_cost'),bc=pickValue('Buying Costs','buying_costs'),bridge=pickValue('Bridge Finance Cost','bridge_finance_cost'),sell=pickValue('Selling Costs','selling_costs'),con=pickValue('Contingency','contingency'),refi=pickValue('Refinance Costs','refinance_costs');let title='',body='';if(type==='refurb'){title='Refurbishment';body=bRow('Estimated refurbishment',money(r))+'<div class="breakdown-note">AI estimate based on the listing evidence and current Lancashire refurbishment assumptions.</div>'}if(type==='buying'){const stamp=pickValue('Stamp Duty','stamp_duty'),sol=pickValue('Solicitor Fees','solicitor_fees'),broker=pickValue('Broker Fees','broker_fees'),search=pickValue('Search Fees','search_fees'),auction=pickValue('Auction Fees','auction_fees'),auctionStatus=pickValue('Auction Fee Status','auction_fees_status'),calcStatus=pickValue('Calculation Status','calculation_status'),confirmed=pickValue('Confirmed Auction Fees','confirmed_auction_fees','auction_fees_confirmed'),allowance=pickValue('Provisional Auction Fee Allowance','provisional_auction_fee_allowance','auction_fee_allowance'),modelled=pickValue('Total Auction Fees Modelled','total_auction_fees_modelled','auction_fees_modelled');title='Buying Costs';body=bRow('Stamp duty',money(stamp))+bRow('Solicitor fees',money(sol))+bRow('Broker fees',money(broker))+bRow('Search fees',money(search))+bRow('Confirmed / extracted auction fees',money(confirmed!==null?confirmed:auction))+bRow('Provisional auction fee allowance',money(allowance))+bRow('Total auction fees modelled',money(modelled!==null?modelled:(auction!==null?auction:null)))+bRow('Total buying costs',money(bc),true)+'<div class="breakdown-note">Auction fee status: '+(auctionStatus||calcStatus||'Not supplied')+'. Where charges are unconfirmed, any provisional allowance is an estimate rather than a quoted or confirmed fee. Check the auction conditions and legal pack before bidding.</div>'}if(type==='bridge'){title='Bridge Finance';body=bRow('Bridge finance cost',money(bridge),true)+'<div class="breakdown-note">The finance cost returned by the Investment Engine under its current bridge assumptions.</div>'}if(type==='selling'){title='Selling Costs';body=bRow('Selling costs',money(sell),true)+'<div class="breakdown-note">Current engine assumption includes estate agent and selling legal costs.</div>'}if(type==='contingency'){title='Contingency';body=bRow('Contingency',money(con),true)+'<div class="breakdown-note">Current engine configuration uses 12% of refurbishment cost.</div>'}if(type==='refi'){title='Refinance Costs';body=bRow('Refinance costs',money(refi),true)+'<div class="breakdown-note">Current engine assumption includes the refinance arrangement fee and refinance legal fees.</div>'}$('modalTitle').textContent=title;$('modalBody').innerHTML=body;$('modalBackdrop').style.display='flex'}
+
+function showDetail(type){
+const m=pickValue('Asking Price','asking_price'),
+r=pickValue('Estimated Refurb Cost','estimated_refurb_cost'),
+bc=pickValue('Buying Costs','buying_costs'),
+bridge=pickValue('Bridge Finance Cost','bridge_finance_cost'),
+sell=pickValue('Selling Costs','selling_costs'),
+con=pickValue('Contingency','contingency'),
+refi=pickValue('Refinance Costs','refinance_costs');
+let title='',body='';
+if(type==='refurb'){
+title='Refurbishment';
+body=bRow('Estimated refurbishment',money(r))+'<div class="breakdown-note">AI estimate based on the listing evidence and current Lancashire refurbishment assumptions.</div>'
+}
+if(type==='buying'){
+const stamp=pickValue('Stamp Duty','stamp_duty'),
+sol=pickValue('Solicitor Fees','solicitor_fees'),
+broker=pickValue('Broker Fees','broker_fees'),
+search=pickValue('Search Fees','search_fees'),
+auction=pickValue('Auction Fees','auction_fees'),
+auctionStatus=pickValue('Auction Fee Status','auction_fees_status'),
+calcStatus=pickValue('Calculation Status','calculation_status'),
+confirmed=pickValue('Confirmed Auction Fees','confirmed_auction_fees','auction_fees_confirmed'),
+allowance=pickValue('Provisional Auction Fee Allowance','provisional_auction_fee_allowance','auction_fee_allowance'),
+modelled=pickValue('Total Auction Fees Modelled','total_auction_fees_modelled','auction_fees_modelled'),
+feeBreakdown=pickValue('Auction Fee Breakdown','auction_fee_breakdown')||{};
+const nestedFee=(...keys)=>{for(const k of keys){if(feeBreakdown[k]!==undefined&&feeBreakdown[k]!==null&&feeBreakdown[k]!=='')return feeBreakdown[k]}return null};
+const admin=nestedFee('administration_fee','administration_fee_inc_vat'),
+reservation=nestedFee('reservation_fee','reservation_fee_inc_vat'),
+premium=nestedFee('buyers_premium','buyers_premium_inc_vat'),
+disbursements=nestedFee('additional_disbursements','additional_disbursements_inc_vat');
+title='Buying Costs';
+body=bRow('Stamp duty',money(stamp))+
+bRow('Solicitor fees',money(sol))+
+bRow('Broker fees',money(broker))+
+bRow('Search fees',money(search))+
+'<div class="modal-section"><h4>Auction fees</h4>'+
+bRow('Administration fee',money(admin))+
+bRow('Reservation fee',money(reservation))+
+bRow("Buyer’s premium",money(premium))+
+bRow('Additional disbursements',money(disbursements))+
+bRow('Confirmed / extracted auction fees',money(confirmed!==null?confirmed:auction))+
+bRow('Provisional auction fee allowance',money(allowance))+
+bRow('Total auction fees modelled',money(modelled!==null?modelled:(auction!==null?auction:null)),true)+
+'</div>'+
+bRow('Total buying costs',money(bc),true)+
+'<div class="breakdown-note">Auction fee / calculation status: '+(auctionStatus||calcStatus||'Not supplied')+'. A dash means the workflow did not provide a separate figure; it does not mean the charge is £0. Where charges are unconfirmed, any provisional allowance is an estimate rather than a quoted or confirmed fee. Check the auction conditions and legal pack before bidding.</div>'
+}
+
+if(type==='bridge'){
+title='Bridge Finance';
+body=bRow('Bridge finance cost',money(bridge),true)+'<div class="breakdown-note">The finance cost returned by the Investment Engine under its current bridge assumptions.</div>'
+}
+if(type==='selling'){
+title='Selling Costs';
+body=bRow('Selling costs',money(sell),true)+'<div class="breakdown-note">Current engine assumption includes estate agent and selling legal costs.</div>'
+}
+if(type==='contingency'){
+title='Contingency';
+body=bRow('Contingency',money(con),true)+'<div class="breakdown-note">Current engine configuration uses 12% of refurbishment cost.</div>'
+}
+if(type==='refi'){
+title='Refinance Costs';
+body=bRow('Refinance costs',money(refi),true)+'<div class="breakdown-note">Current engine assumption includes the refinance arrangement fee and refinance legal fees.</div>'
+}
+$('modalTitle').textContent=title;
+$('modalBody').innerHTML=body;
+$('modalBackdrop').style.display='flex'
+}
 function setProgress(percent,step){$('progressBar').style.width=percent+'%';$('loadingPercent').textContent=percent+'%';document.querySelectorAll('.step').forEach((e,i)=>{e.classList.toggle('done',i<step);e.classList.toggle('active',i===step)})}
 function render(d){if(Array.isArray(d))d=d[0];d=d?.json||d||{};const f=d.fields||d;propertyData=f;const pick=(...keys)=>{for(const k of keys)if(f[k]!==undefined&&f[k]!==null&&f[k]!=='')return f[k];return null};$('address').textContent=pick('Address','address')||'Property analysis';$('meta').textContent=[pick('Property Type','property_type'),pick('Bedrooms','bedrooms')?pick('Bedrooms','bedrooms')+' bed':null,pick('Tenure','tenure'),pick('Purchase Type','purchase_type')].filter(Boolean).join(' • ');$('score').textContent=pick('Investment Score','investment_score')??'—';$('strategy').textContent=pick('Recommended Strategy','recommended_strategy')||'—';$('askingTop').textContent=money(pick('Asking Price','asking_price'));$('gdvTop').textContent=money(pick('Expected GDV','Estimated GDV','estimated_gdv'));
 const vals={purchase:pick('Asking Price','asking_price'),gdv:pick('Expected GDV','Estimated GDV','estimated_gdv'),total:pick('Total Project Cost','total_project_cost'),cashLeft:pick('BRR Cash Left','brr_cash_left'),cashReleased:pick('BRR Cash Released','brr_cash_released'),equity:pick('Equity Created','equity_created'),brr:pick('BRR Maximum Allowable Offer (MAO)','BRR MAO','brr_maximum_allowable_offer'),profit:pick('Estimated Profit','estimated_profit'),roi:pick('Flip ROI','flip_roi'),flip:pick('Flip Maximum Allowable Offer','Flip MAO','flip_maximum_allowable_offer')};
 $('brrPurchase').textContent=money(vals.purchase);$('brrGdv').textContent=money(vals.gdv);$('brrTotal').textContent=money(vals.total);$('brrCashLeft').textContent=vals.cashLeft!==null?money(vals.cashLeft):money(vals.cashReleased);$('brrEquity').textContent=money(vals.equity);$('brrMao').textContent=money(vals.brr);$('flipPurchase').textContent=money(vals.purchase);$('flipGdv').textContent=money(vals.gdv);$('flipTotal').textContent=money(vals.total);$('flipProfit').textContent=money(vals.profit);$('flipRoi').textContent=pct(vals.roi);$('flipMao').textContent=money(vals.flip);$('refurb').textContent=money(pick('Estimated Refurb Cost','estimated_refurb_cost'));$('buying').textContent=money(pick('Buying Costs','buying_costs'));$('bridge').textContent=money(pick('Bridge Finance Cost','bridge_finance_cost'));$('selling').textContent=money(pick('Selling Costs','selling_costs'));$('contingency').textContent=money(pick('Contingency','contingency'));$('refi').textContent=money(pick('Refinance Costs','refinance_costs'));$('summary').textContent=pick('Investment Summary','Strategy Notes','investment_summary','strategy_notes')||'No summary returned.';$('risks').textContent=pick('Major Risks','major_risks')||'No major risks returned.';
+
 const feeStatus=String(pick('Auction Fee Status','auction_fees_status')||'').toUpperCase();
 const calcStatus=String(pick('Calculation Status','calculation_status')||'').toUpperCase();
 const purchaseType=String(pick('Purchase Type','purchase_type')||'').toLowerCase();
